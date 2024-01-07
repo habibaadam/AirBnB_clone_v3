@@ -67,19 +67,18 @@ class DBStorage:
     def get(self, cls, id):
         """Returns the object based on the class and its ID,
         or None if not found"""
-        if cls in classes.values() and id and isinstance(id, str):
-            objs = self.all(cls)
-            for key, value in objs.items():
-                if key.split('.')[1] == id:
-                    return value
-        return None
+        return self.__session.query(cls).get(id)
 
     def count(self, cls=None):
         """Returns the number of objects in storage matching the given class.
         If no class is passed, returns the count of all objects in storage."""
-        if cls in classes.values():
-            return len(self.all(cls))
-        return len(self.all())
+        if cls is not None:
+            return self.__session.query(cls).count()
+        else:
+            total = 0
+            for clsses in classes:
+                total += self.__session.query(classes[clsses]).count()
+            return total
 
     def reload(self):
         """reloads data from the database"""

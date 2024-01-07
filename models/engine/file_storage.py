@@ -51,19 +51,17 @@ class FileStorage:
     def get(self, cls, id):
         """Returns the object based on the class and its ID,
         or None if not found"""
-        if cls in classes.values() and id and isinstance(id, str):
-            objs = self.all(cls)
-            for key, value in objs.items():
-                if key.split('.')[1] == id:
-                    return value
-        return None
+        key = "{}.{}".format(cls.__name__, id)
+        return self.__objects.get(key, None)
 
     def count(self, cls=None):
         """Returns the number of objects in storage matching the given class.
         If no class is passed, returns the count of all objects in storage."""
-        if cls in classes.values():
-            return len(self.all(cls))
-        return len(self.all())
+        if cls is not None:
+            return sum(1 for obj in self.__objects.values()
+                       if isinstance(obj, cls))
+        else:
+            return len(self.__objects)
 
     def reload(self):
         """deserializes the JSON file to __objects"""
@@ -72,8 +70,8 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+        except:
+            pass
 
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
