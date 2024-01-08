@@ -10,6 +10,7 @@ from models.amenity import Amenity
 from api.v1.views import app_views
 from models import storage
 
+
 @app_views.route('/cities/<city_id>/places', methods=['GET'],
                  strict_slashes=False)
 def get_places_by_city(city_id):
@@ -17,8 +18,8 @@ def get_places_by_city(city_id):
     city = storage.get(City, city_id)
     if not city:
         abort(404)
-        places = [place.to_dict() for place in city.places]
-        return jsonify(places)
+    places = [place.to_dict() for place in city.places]
+    return jsonify(places)
 
 
 @app_views.route('/places/<place_id>', methods=['GET'],
