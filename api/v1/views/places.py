@@ -5,9 +5,7 @@ Create a view for Place objects - handles all default RESTful API actions
 from flask import abort, jsonify, request
 from models.city import City
 from models.place import Place
-from models.state import State
 from models.user import User
-from models.amenity import Amenity
 from api.v1.views import app_views
 from models import storage
 
@@ -45,7 +43,7 @@ def delete_place(place_id):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/city_id>/places', methods=['POST'],
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
 def create_place(city_id):
     """
