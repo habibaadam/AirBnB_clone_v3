@@ -2,10 +2,15 @@
 """ Flask application  initialization for aibrnb clone"""
 from flask import Flask, jsonify, make_response, render_template, url_for
 from models import storage
+from flask_cors import CORS
 from api.v1.views import app_views
 import os
 
+
 app = Flask(__name__)
+app.url_map.strict_slashes = False
+cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
+
 app.register_blueprint(app_views)
 
 

@@ -1,31 +1,25 @@
 #!/usr/bin/python3
 """Defines a Flask route"""
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from api.v1.views import app_views
 from models import storage
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
-from models.user import User
 
 
-@app_views.route('/status', methods=['GET'])
+@app_views.route("/status", methods=['GET'], strict_slashes=False)
 def status():
-    """Returns a JSON response with the status OK"""
-    return jsonify({"status": "OK"})
+    """
+    Returns a JSON response with the status OK
+    """
+    response = {"status": "OK"}
+    return jsonify(response)
 
 
 @app_views.route('/stats', methods=['GET'])
 def get_stats():
     """Retrieves the number of each objects by type."""
-    stats = {
-        'amenities': storage.count('Amenity'),
-        'cities': storage.count('City'),
-        'places': storage.count('Place'),
-        'reviews': storage.count('Review'),
-        'states': storage.count('State'),
-        'users': storage.count('User')
-    }
-    return jsonify(stats)
+    stats_dict = {"Amenity": "amenities", "City": "cities",
+                  "Place": "places", "Review": "reviews",
+                  "State": "states", "User": "users"
+                  }
+    all_stats = {stats_dict[key]: storage.count(key) for key in stats_dict}
+    return jsonify(all_stats)
