@@ -14,9 +14,10 @@ from models.user import User
 def review(place_id):
     """Retrieves the list of all Review objects of a Place"""
     obj_place = storage.get(Place, place_id)
-    if not obj_place:
+    if obj_place is None:
         abort(404)
-    return jsonify([obj.to_dict() for obj in obj_place.reviews])
+    reviews = [obj.to_dict() for obj in obj_place.reviews]
+    return jsonify(reviews)
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET'], strict_slashes=False)
