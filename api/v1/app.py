@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" Flask application  initialization for aibrnb clone"""
+"""
+Flask application  initialization for aibrnb clone
+"""
 from flask import Flask, jsonify, make_response, render_template, url_for
 from models import storage
 from flask_cors import CORS
